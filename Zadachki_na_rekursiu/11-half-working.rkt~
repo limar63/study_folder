@@ -1,0 +1,13 @@
+#lang racket
+(require racket/trace)
+(define (Position X L) 
+(if (null? (cdr L))
+    0
+    (if (equal? X (car L))
+        1
+        (+ 1 (Position X (cdr L))))))
+(trace Position)
+(Position 'z '(x c v a s d e r a))
+;Составить функцию (Position X L), возвращающую порядковый
+;номер значения Х в списке L, либо 0, если выражение Х не
+;встречается в списке на верхнем уровне.

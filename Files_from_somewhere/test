@@ -1,0 +1,6 @@
+(defun Position (X L) 
+  (if (null (cdr L))
+      0
+      (if (= X (car L))
+          1
+          (let ((tmp (Position X (cdr L)))) (if (= tmp 0) 0 (+ tmp 1))))))

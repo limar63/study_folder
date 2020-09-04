@@ -1,0 +1,6 @@
+(defun AtBase (x) (<= x 1)) 
+(defun BaseCase (x) 1)
+(defun Combine (x recursion-result) (* x recursion-result))
+(defun Decomp (x) (- x 1))
+     
+(defun fn (x) (if (AtBase x) (BaseCase x) (Combine x (fn (Decomp x)))))

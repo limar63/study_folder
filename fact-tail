@@ -1,0 +1,9 @@
+(defun fact (number accum)
+  (if (= number 0)
+      accum
+      (if (= number 1)
+          accum
+          (fact (- number 1) (* accum number)))))
+
+
+

@@ -1,0 +1,24 @@
+#lang racket
+(require racket/trace)
+;(define (DeleteA L X) (if (equal? (car L) X)
+                          ;(cdr L)
+                          ;(if (list? (car L))
+                              ;(DeleteA (cons (DeleteA (car L) X) (cdr L)) X)
+                              ;(cons (car L) (DeleteA (cdr L) X)))))
+;(DeleteA '(a b (x x a) c x) 'x)
+
+(define (DeleteB L X) (if (null? L)
+                          null
+                          (if (equal? (car L) X)
+                              (DeleteB (cdr L) X)
+                              (cons (car L) (DeleteB (cdr L) X)))))
+(DeleteB '((a x b x (x x a) c x)) 'x)
+
+
+(define (DeleteA L X) (if (list? (car L))
+  (DeleteA (car L) X)
+  (if (equal? (car L) X)
+      (cdr L) (cons (car L) (DeleteA (cdr L) X)))))
+                          
+(trace DeleteA)
+(DeleteA '((a b (x x a) c x)) 'x)
