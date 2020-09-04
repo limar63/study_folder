@@ -14,75 +14,7 @@ int snake_body_y[x_size * y_size];
 
 const int snake_limit = x_size * y_size;
 
-/*struct return_two_ints {                                        //struct to get two results in return from a function
-    int first, second;
-} return_apple;*/
-
-int print_arr[x_size * y_size];
-
-int head_mark;                                               //snake length variable
-
-int tail_mark;
-
-int x_app;                                                      //variable that will contain x coordinate of the apple
-
-int y_app;                                                      //variable that will contain y coordinate of the apple
-
-int x_change;                                                   //variable for turning the snake around after getting user input on x axis
-
-int y_change;                                                   //variable for turning the snake around after getting user input on y axis
-
-int x;                                                          //variable for current active cord on x axis
-
-int y;                                                          //variable for current active cord on y axis
-
-int naptime;                                                    //variable for speed purposes of the snake
-
-int snake_size;
-
-void printing_arr() {
-	mvprintw(5, 11, " ");
-	mvprintw(6, 11, " ");
-	char result_x[5 * x_size * y_size + 1];
-	char result_y[5 * x_size * y_size + 1];
-	char sint[3];
-	strcpy(result_x, "");
-	strcpy(result_y, "");
-	/*
-	int i;
-	for (i; i < x_size * y_size; i++) {
-		sprintf(sint, "%d ", snake_body_x[i]);
-		strcat(result_x, sint);
-		sprintf(sint, "%d ", snake_body_y[i]);
-		strcat(result_y, sint);
-	}*/
-	if (head_mark < tail_mark) {
-		int i;
-		for (i; i <= head_mark; i++) {
-        	sprintf(sint, "%d ", snake_body_x[i]);
-			strcat(result_x, sint);
-			sprintf(sint, "%d ", snake_body_y[i]);
-			strcat(result_y, sint);
-		}
-		i = tail_mark;
-		for (i; i < snake_limit; i++) {
-			sprintf(sint, "%d ", snake_body_x[i]);
-			strcat(result_x, sint);
-			sprintf(sint, "%d ", snake_body_y[i]);
-			strcat(result_y, sint);
-		}
-    } else {
-		int i = tail_mark;
-		for (i; i <= head_mark; i++) {
-			sprintf(sint, "%d ", snake_body_x[i]);
-			strcat(result_x, sint);
-			sprintf(sint, "%d ", snake_body_y[i]);
-			strcat(result_y, sint);
-		}
-	}
-	mvprintw(5, 11, "%s ", result_x);
-	mvprintw(6, 11, "%s ", result_y);
-}
+int head_mark, tail_mark, x_app, y_app, x_change, y_change, x, y, snake_size;
 
 bool apple_check(int xapp, int yapp) {
     if (head_mark < tail_mark) {
@@ -109,7 +41,6 @@ bool apple_check(int xapp, int yapp) {
     return false;
 }
 
-
 void apple_create() {
     time_t t;
     srand((unsigned) time(&t));
@@ -122,7 +53,6 @@ void apple_create() {
         y_app = y_res;
     }
 }
-
 
 void add_as_head() {                                                                //this function require first element to be added to an array
     head_mark++;                                                                     
@@ -184,22 +114,6 @@ void moving_and_drawing() {
 	add_as_head();
 	mvprintw(snake_body_y[head_mark], snake_body_x[head_mark], "#");
 	if (head_mark < tail_mark) {
-		int i;
-		for (i; i < head_mark; i++) {
-        	if (snake_body_x[head_mark] == snake_body_x[i] && snake_body_y[head_mark] == snake_body_y[i]) {
-				endwin();
-            	printf("Game over!2\n");
-            	exit(0);
-			}
-		}
-		i = tail_mark;
-		for (i; i < snake_limit; i++) {
-        	if (snake_body_x[head_mark] == snake_body_x[i] && snake_body_y[head_mark] == snake_body_y[i]) {
-				endwin();
-            	printf("Game over!3\n");
-            	exit(0);
-			}
-		}
 		if (snake_body_x[head_mark] == x_app && snake_body_y[head_mark]== y_app) {
 			apple_create();
 			mvprintw(y_app, x_app, "@");
@@ -208,14 +122,6 @@ void moving_and_drawing() {
 			cut_the_tail();
 		}
     } else {
-		int i = tail_mark;
-		for (i; i < head_mark; i++) {
-			if (snake_body_x[head_mark] == snake_body_x[i] && snake_body_y[head_mark] == snake_body_y[i]) {
-				endwin();
-				printf("Game over!4\n");
-				exit(0);
-			}
-		}
 		if (snake_body_x[head_mark] == x_app && snake_body_y[head_mark]== y_app) {
 			apple_create();
 			mvprintw(y_app, x_app, "@");
@@ -236,8 +142,6 @@ int main(void) {
 	y = 0;																							
 	x_change = 0;
 	y_change = 1;
-	nodelay(stdscr, TRUE);
-    naptime = 1;
 	keypad(stdscr, TRUE);
 	snake_body_x[0] = x;
     snake_body_y[0] = y;
@@ -245,12 +149,9 @@ int main(void) {
 	apple_create();
 	mvprintw(y_app, x_app, "@");
 	mvprintw(snake_body_y[0], snake_body_x[0], "#");
-
     while (TRUE) {
         moving_and_drawing();
-		//printing_arr();
         int a = getchar();
-        //usleep(2);
         getting_input(a);
     }
     endwin();                                                   //deinitializng the ncurses
