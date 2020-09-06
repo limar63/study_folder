@@ -14,39 +14,39 @@ int snake_body_y[x_size * y_size];
 
 const int snake_limit = x_size * y_size;
 
-int head_mark, tail_mark, x_app, y_app, x_change, y_change, x, y, snake_size;
+int head_mark, tail_mark, x_app, y_app, x_change, y_change, x, y, snake_size, naptime;
 
-bool apple_check(int xapp, int yapp) {
+int apple_check(int xapp, int yapp) {
     if (head_mark < tail_mark) {
 		int i;
 		for (i; i <= head_mark; i++) {
         	if (snake_body_x[i] == xapp && snake_body_y[i] == yapp) {
-            	return true;
+            	return 1;
         	}
 		}
 		i = tail_mark;
 		for (i; i < snake_limit; i++) {
 			if (snake_body_x[i] == xapp && snake_body_y[i] == yapp) {
-				return true;
+				return 1;
 			}
 		}
     } else {
 		int i = tail_mark;
 		for (i; i <= head_mark; i++) {
 			if (snake_body_x[i] == xapp && snake_body_y[i] == yapp) {
-				return true;
+				return 1;
 			}
 		}
 	}
-    return false;
+    return 0;
 }
 
 void apple_create() {
-    time_t t;
-    srand((unsigned) time(&t));
     int x_res = rand() % x_size;
     int y_res = rand() % y_size;
-    if (apple_check(x_res, y_res) == true) {
+    if (apple_check(x_res, y_res) == 1) {
+		mvprintw(14, 14, "GOT THE SAME! %d, %d", x_res, y_res);
+		refresh();
         return apple_create();
     } else {
         x_app = x_res;
@@ -83,16 +83,16 @@ void getting_input(int a) {
 		endwin();
 		printf("Game over!1\n");
 		exit(0);
-	} else if (a == 67 && x_change != -1) {
+	} else if (a == KEY_RIGHT && x_change != -1) {
 		x_change = 1;
 		y_change = 0;
-	} else if (a == 68 && x_change != 1) {
+	} else if (a == KEY_LEFT && x_change != 1) {
 		x_change = -1;
 		y_change = 0;
-	} else if (a == 66 && y_change != -1) {
+	} else if (a == KEY_DOWN && y_change != -1) {
 		x_change = 0;
 		y_change = 1;
-	} else if (a == 65 && y_change != 1) {
+	} else if (a == KEY_UP && y_change != 1) {
 		x_change = 0;
 		y_change = -1;
 	}
@@ -134,6 +134,8 @@ void moving_and_drawing() {
 }
 
 int main(void) {
+	time_t t;
+    srand((unsigned) time(&t));
     initscr();                                                  //initializing the ncurses
     cbreak();                                                   //for not breaking program by cntrl+c
     noecho();                                                   //no echoing of the input on the screen
@@ -142,17 +144,25 @@ int main(void) {
 	y = 0;																							
 	x_change = 0;
 	y_change = 1;
-	keypad(stdscr, TRUE);
+	naptime = 1000;
+	keypad(stdscr, 1);
+	nodelay(stdscr, 1);
+	timeout(naptime);
 	snake_body_x[0] = x;
     snake_body_y[0] = y;
     snake_size = 1; 	
 	apple_create();
 	mvprintw(y_app, x_app, "@");
 	mvprintw(snake_body_y[0], snake_body_x[0], "#");
-    while (TRUE) {
+    while (1) {
         moving_and_drawing();
-        int a = getchar();
+        int a = getch();
+		mvprintw(11, 11, "%d", a);
         getting_input(a);
+		
+		//char thingy;
+		//sprintf(thingy, "%d", a);
+		
     }
     endwin();                                                   //deinitializng the ncurses
     return 0;

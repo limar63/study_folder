@@ -1,7 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <curses.h>
-#include <stdbool.h>
 
 struct snake_piece {
     int x, y;
@@ -37,19 +35,17 @@ int y;                                                          //variable for c
 int naptime;                                                    //variable for speed purposes of the snake
 
 void apple_create() {
-    time_t t;
-    srand((unsigned) time(&t));
     int x_res = rand() % x_limit;
     int y_res = rand() % y_limit;
-    bool check = false;
     struct snake_piece * current_piece = snake_head;
+	int check = 0;
     while ((*current_piece).next != NULL) {
         if ((*current_piece).x == x_res && (*current_piece).y == y_res) {
-            check = true;
+            check = 1;
         }
         current_piece = (*current_piece).next;
     }
-    if (check == true) {
+    if (check == 1) {
         return apple_create();
     } else {
         x_app = x_res;
@@ -75,7 +71,7 @@ void add_as_head() {
 		(*new_head).next = old_head;
         snake_head = new_head;
     }
-	snake_length = snake_length + 1;
+	snake_length++;
 }
 
 void cut_the_tail() {
@@ -92,7 +88,7 @@ void cut_the_tail() {
 		(*next_thing).next = NULL;
 		snake_tail = next_thing;
 	}
-	snake_length = snake_length - 1;
+	snake_length--;
 }
 
 void getting_input(int a) {
@@ -100,16 +96,16 @@ void getting_input(int a) {
 		endwin();
 		printf("Game over!\n");
 		exit(0);
-	} else if (a == 67 && x_change != -1) {
+	} else if (a == KEY_RIGHT && x_change != -1) {
 		x_change = 1;
 		y_change = 0;
-	} else if (a == 68 && x_change != 1) {
+	} else if (a == KEY_LEFT && x_change != 1) {
 		x_change = -1;
 		y_change = 0;
-	} else if (a == 66 && y_change != -1) {
+	} else if (a == KEY_DOWN && y_change != -1) {
 		x_change = 0;
 		y_change = 1;
-	} else if (a == 65 && y_change != 1) {
+	} else if (a == KEY_UP && y_change != 1) {
 		x_change = 0;
 		y_change = -1;
 	}
@@ -134,7 +130,7 @@ void moving_and_drawing() {
 	while (current_part != NULL) {
 		if ((*snake_head).x == (*current_part).x && (*snake_head).y == (*current_part).y) {
 			endwin();
-            printf("Game over!");
+            printf("Game over!\n");
             exit(0);
 		}
 		current_part = (*current_part).next;
@@ -150,26 +146,29 @@ void moving_and_drawing() {
 }
 
 int main(void) {
+	time_t t;
+    srand((unsigned) time(&t));
     initscr();                                                  //initializing the ncurses
     cbreak();                                                      //for not breaking program by cntrl+c
     noecho();                                                   //no echoing of the input on the screen
     curs_set(0);                                                //no cursor on the screen
+	snake_length = 0;
     x_limit = 10; 												
 	y_limit = 10; 												
 	x = 0; 																								
 	y = 0; 																								
 	x_change = 0;
 	y_change = 1;
-	nodelay(stdscr, TRUE);
-    naptime = 1;
-	keypad(stdscr, TRUE);
+    naptime = 1000;
+	timeout(naptime);
+	keypad(stdscr, 1);
 	add_as_head();
 	apple_create();
 	mvprintw(y_app, x_app, "@");
 	mvprintw((*snake_head).y, (*snake_head).x, "#");
-    while (TRUE) {
+    while (1) {
         moving_and_drawing();
-        int a = getchar();
+        int a = getch();
         //usleep(2);
         getting_input(a);
     }

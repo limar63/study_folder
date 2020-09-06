@@ -1,7 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <curses.h>
-#include <stdbool.h>
 #include <string.h>
 
 #define x_size 10
@@ -57,7 +55,7 @@ void printing_arr() {
 		strcat(result_y, sint);
 	}*/
 	if (head_mark < tail_mark) {
-		int i;
+		int i = 0;
 		for (i; i <= head_mark; i++) {
         	sprintf(sint, "%d ", snake_body_x[i]);
 			strcat(result_x, sint);
@@ -84,38 +82,37 @@ void printing_arr() {
 	mvprintw(6, 11, "%s ", result_y);
 }
 
-bool apple_check(int xapp, int yapp) {
+int apple_check(int xapp, int yapp) {
     if (head_mark < tail_mark) {
-		int i;
+		int i = 0;
 		for (i; i <= head_mark; i++) {
         	if (snake_body_x[i] == xapp && snake_body_y[i] == yapp) {
-            	return true;
+            	return 1;
         	}
 		}
 		i = tail_mark;
 		for (i; i < snake_limit; i++) {
 			if (snake_body_x[i] == xapp && snake_body_y[i] == yapp) {
-				return true;
+				return 1;
 			}
 		}
     } else {
 		int i = tail_mark;
 		for (i; i <= head_mark; i++) {
 			if (snake_body_x[i] == xapp && snake_body_y[i] == yapp) {
-				return true;
+				return 1;
 			}
 		}
 	}
-    return false;
+    return 0;
 }
 
 
 void apple_create() {
-    time_t t;
-    srand((unsigned) time(&t));
     int x_res = rand() % x_size;
     int y_res = rand() % y_size;
-    if (apple_check(x_res, y_res) == true) {
+    if (apple_check(x_res, y_res) == 1) {
+		refresh();
         return apple_create();
     } else {
         x_app = x_res;
@@ -153,16 +150,16 @@ void getting_input(int a) {
 		endwin();
 		printf("Game over!1\n");
 		exit(0);
-	} else if (a == 67 && x_change != -1) {
+	} else if (a == KEY_RIGHT && x_change != -1) {
 		x_change = 1;
 		y_change = 0;
-	} else if (a == 68 && x_change != 1) {
+	} else if (a == KEY_LEFT && x_change != 1) {
 		x_change = -1;
 		y_change = 0;
-	} else if (a == 66 && y_change != -1) {
+	} else if (a == KEY_DOWN && y_change != -1) {
 		x_change = 0;
 		y_change = 1;
-	} else if (a == 65 && y_change != 1) {
+	} else if (a == KEY_UP && y_change != 1) {
 		x_change = 0;
 		y_change = -1;
 	}
@@ -184,7 +181,7 @@ void moving_and_drawing() {
 	add_as_head();
 	mvprintw(snake_body_y[head_mark], snake_body_x[head_mark], "#");
 	if (head_mark < tail_mark) {
-		int i;
+		int i = 0;
 		for (i; i < head_mark; i++) {
         	if (snake_body_x[head_mark] == snake_body_x[i] && snake_body_y[head_mark] == snake_body_y[i]) {
 				endwin();
@@ -202,6 +199,8 @@ void moving_and_drawing() {
 		}
 		if (snake_body_x[head_mark] == x_app && snake_body_y[head_mark]== y_app) {
 			apple_create();
+			naptime = naptime * 0.95;
+			timeout(naptime);
 			mvprintw(y_app, x_app, "@");
 		} else {
 			mvprintw(snake_body_y[tail_mark], snake_body_x[tail_mark], " ");
@@ -218,6 +217,8 @@ void moving_and_drawing() {
 		}
 		if (snake_body_x[head_mark] == x_app && snake_body_y[head_mark]== y_app) {
 			apple_create();
+			naptime = naptime * 0.95;
+			timeout(naptime);
 			mvprintw(y_app, x_app, "@");
 		} else {
 			mvprintw(snake_body_y[tail_mark], snake_body_x[tail_mark], " ");
@@ -228,6 +229,8 @@ void moving_and_drawing() {
 }
 
 int main(void) {
+	time_t t;
+    srand((unsigned) time(&t));
     initscr();                                                  //initializing the ncurses
     cbreak();                                                   //for not breaking program by cntrl+c
     noecho();                                                   //no echoing of the input on the screen
@@ -236,20 +239,22 @@ int main(void) {
 	y = 0;																							
 	x_change = 0;
 	y_change = 1;
-	nodelay(stdscr, TRUE);
-    naptime = 1;
-	keypad(stdscr, TRUE);
+    naptime = 1000;
+	keypad(stdscr, 1);
+	timeout(naptime);
 	snake_body_x[0] = x;
     snake_body_y[0] = y;
+	head_mark = 0;
+	tail_mark = 0;
     snake_size = 1; 	
 	apple_create();
 	mvprintw(y_app, x_app, "@");
 	mvprintw(snake_body_y[0], snake_body_x[0], "#");
 
-    while (TRUE) {
+    while (1) {
         moving_and_drawing();
 		//printing_arr();
-        int a = getchar();
+        int a = getch();
         //usleep(2);
         getting_input(a);
     }
