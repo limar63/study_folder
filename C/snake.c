@@ -137,6 +137,8 @@ void moving_and_drawing() {
 	}
 	if ((*snake_head).x == x_app && (*snake_head).y == y_app) {
 		apple_create();
+		naptime = naptime * 0.95;
+		timeout(naptime);
 		mvprintw(y_app, x_app, "@");
 	} else {
 		mvprintw((*snake_tail).y, (*snake_tail).x, " ");
