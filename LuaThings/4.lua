@@ -2,6 +2,7 @@
 --начала списка (невзирая на скобки) атом списка:
 --(LastAtom '(((5)A))) => A
 
+--Just realized I should add reversing of the given table in case if step is <0 and maybe check it for a valid input
 function table.slice(tbl, first, last, step)
     local sliced = {}
     for i = first or 1, last or #tbl, step or 1 do
