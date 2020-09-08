@@ -11,12 +11,8 @@ function table.slice(tbl, first, last, step)
     return sliced
 end
 
-function table.concat(t1,t2)
-    if t1 == nil then
-        return t2
-    elseif t2 == nil then
-        return t1
-    else
+function TableConcat(t1,t2)                                                                                    --Function which adds second table to the first one and returns the summed table
+    if t2 ~= nil then
         for i=1,#t2 do
             t1[#t1+1] = t2[i]
         end
@@ -24,11 +20,31 @@ function table.concat(t1,t2)
     return t1
 end
 
+
+function map(tbl, f)                                                                                           --higher order function, which applies function to all elements inside the table
+    -- print('Mapping ', tbl)
+     local t = {}
+     for k,v in pairs(tbl) do
+         t[k] = f(v)
+     end
+     return t
+ end
+ 
+function printArray(array)                                                              --function to print arrayt of any length
+    if type(array) == 'number' then
+        return tostring(array)
+    elseif type(array) == 'string' then
+        return "'" .. array .. "'"
+    else
+        return '{' .. table.concat(map(array, function(x) return printArray(x) end), ', ') .. '}'
+    end
+end
+
 function DeleteA(L, X)
     if L[1] == X then
         return table.slice(L, 2)
     else
-        return table.concat({L[1]}, DeleteA(table.slice(L, 2), X))
+        return TableConcat({L[1]}, DeleteA(table.slice(L, 2), X))
     end
 end
 
@@ -38,24 +54,9 @@ function DeleteB(L, X)
     elseif L[1] == X then
         return DeleteB(table.slice(L, 2), X)
     else
-        return table.concat({L[1]}, DeleteB(table.slice(L, 2), X))
+        return TableConcat({L[1]}, DeleteB(table.slice(L, 2), X))
     end
 end
-
-array_for_delete = DeleteB({'a', {'b', 'c'}, 'b', 'c', 'x', 'x', 'b', 'b', 'c', 'd'}, 'b')
-
-result = ''
-for i = 1, #array_for_delete do
-    if type(array_for_delete[i]) == 'table' then
-        result = result .. '{'
-        for j=1, #array_for_delete[i] do
-            result = result .. array_for_delete[i][j] .. ' '
-        end
-        result = string.sub(result, 1, string.len(result) - 1)
-        result = result .. '}' .. ' '
-    else
-        result = result .. array_for_delete[i] .. ' '
-    end
-end
-
-print(result)
+var_for_delition = 'b'
+print('Only one deletion of', var_for_delition, 'is:', printArray(DeleteA({'a', {'b', 'c'}, 'b', 'c', 'x', 'x', 'b', 'b', 'c', 'd'}, var_for_delition)))
+print('Deleting of all   ', var_for_delition, 'is:', printArray(DeleteB({'a', {'b', 'c'}, 'b', 'c', 'x', 'x', 'b', 'b', 'c', 'd'}, var_for_delition))) 
