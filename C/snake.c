@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <curses.h>
+#include <stdio.h>
 
 struct snake_piece {
     int x, y;
@@ -34,18 +35,21 @@ int y;                                                          //variable for c
 
 int naptime;                                                    //variable for speed purposes of the snake
 
-void apple_create() {
-    int x_res = rand() % x_limit;
-    int y_res = rand() % y_limit;
-    struct snake_piece * current_piece = snake_head;
-	int check = 0;
-    while ((*current_piece).next != NULL) {
-        if ((*current_piece).x == x_res && (*current_piece).y == y_res) {
-            check = 1;
+int apple_check(int xapp, int yapp) {
+	struct snake_piece * current_piece = snake_head;
+	while ((*current_piece).next != NULL) {
+        if ((*current_piece).x == xapp && (*current_piece).y == yapp) {
+            return 1;
         }
         current_piece = (*current_piece).next;
     }
-    if (check == 1) {
+	return 0;
+}
+
+void apple_create() {
+    int x_res = rand() % x_limit;
+    int y_res = rand() % y_limit;
+    if (apple_check(x_res, y_res) == 1) {
         return apple_create();
     } else {
         x_app = x_res;
