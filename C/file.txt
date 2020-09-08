@@ -1,0 +1,3 @@
+Checking file opening
+Reading of the second line
+Final
