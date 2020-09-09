@@ -51,7 +51,6 @@ function char_apply(charac, arr)
     function(x) 
         return TableConcat({charac .. x[1]}, table.slice(x, 2))
     end)
-    
 end
     
 --function which inserts to every nested list a chracter as a first element
@@ -197,13 +196,14 @@ end
 
 
 result = mic_cut_off('bacacababa')
-
+--uncomment next line if you want to see what it looks like before filtering (A LOT OF TEXT)
 --print(printArray(result))
-print(printArray({{{{{{{{{{{{{'a'}, 'b'}, 1}, 'c'}, 'f'}, 2}}}}, 'g'}}}}))
 --checking whole table of tables and getting best table
 function final_check(array_of_arrays)
     local result_local = {''}
+    --getting a table where all characters are odd through filtering it
     local tble = table.filter(array_of_arrays, all_odd)
+    --finding the one table with minimum amount of elements
     return table.concat(min(tble, function(x) return #x end), '|')
 end
 --printing best table
