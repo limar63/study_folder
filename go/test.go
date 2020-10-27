@@ -1,14 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 )
 
-
 type Snake_piece struct {
-	X int
-	Y int
+	X    int
+	Y    int
 	next *Snake_piece
 }
 
@@ -47,7 +46,7 @@ func cut_the_tail() {
 func main() {
 	add_as_head(1, 5)
 	var current_element *Snake_piece = snake_head
-    for current_element != nil {
+	for current_element != nil {
 		fmt.Println(current_element.X, current_element.Y)
 		current_element = current_element.next
 	}
@@ -55,7 +54,7 @@ func main() {
 	fmt.Println("#")
 	add_as_head(2, 5)
 	current_element = snake_head
-    for current_element != nil {
+	for current_element != nil {
 		fmt.Println(current_element.X, current_element.Y)
 		current_element = current_element.next
 	}
@@ -63,7 +62,7 @@ func main() {
 	fmt.Println("#")
 	add_as_head(3, 5)
 	current_element = snake_head
-    for current_element != nil {
+	for current_element != nil {
 		fmt.Println(current_element.X, current_element.Y)
 		current_element = current_element.next
 	}
@@ -71,7 +70,7 @@ func main() {
 	fmt.Println("#")
 	cut_the_tail()
 	current_element = snake_head
-    for current_element != nil {
+	for current_element != nil {
 		fmt.Println(current_element.X, current_element.Y)
 		current_element = current_element.next
 	}
@@ -79,10 +78,10 @@ func main() {
 	fmt.Println("#")
 	cut_the_tail()
 	current_element = snake_head
-    for current_element != nil {
+	for current_element != nil {
 		fmt.Println(current_element.X, current_element.Y)
 		current_element = current_element.next
 	}
 	fmt.Println("head is ", snake_head, "tail is", snake_tail)
-	
+
 }

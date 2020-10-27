@@ -1,0 +1,24 @@
+[length [dup null?] [pop 0] [cdr length 1 +] ifte] define
+
+[a b c d e] length
+
+[append swap [dup null?] [pop] [uncons [swap] dip swap append cons] ifte] define
+
+[a b c] [d e] append
+
+[map [swap dup null?] [swap pop] [[dup] dip swap [dup cdr swap car swap [swap i] dip] dip map cons] ifte] define
+
+[A B C] [2 *] map
+
+[filter swap dup [null?] [swap pop] [swap dup [swap] dip [uncons swap dup] dip [swap [swap] dip swap filter cons] [pop swap filter] ifte] ifte] define
+ 
+[1 -3 4 -7] [0 >] filter
+
+[foldr swap dup [null?] [pop pop] [swap [uncons] dip dup dip2 swap foldr] ifte] define
+
+5 [6 1 2 3 4] [/] foldr
+
+[foldl swap dup [null?] [pop pop] [swap [uncons] dip dup dip2 swap foldl] ifte] define
+
+64 [4 2 4] [/] foldl
+
