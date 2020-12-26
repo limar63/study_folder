@@ -1,0 +1,52 @@
+#lang racket
+(require 2htdp/image)
+(define main-list '((4 0) (2 7 7 7) 10))
+
+
+(place-image (square 10 "solid" "green") 15 15 (place-image (square 10 "solid" "green") 35 35 (empty-scene 100 100)))
+
+
+
+
+;x and y reversed (x is right and y is left element)
+(define (apple-list given-list) (car given-list))
+(define (snake-list given-list) (cadr given-list))
+(define (list-past-snake given-list) (cddr given-list))
+(define (change-list given-list) (caddr given-list))
+(define (apple-x given-list) (cadr (apple-list given-list)))
+(define (apple-y given-list) (car (apple-list given-list)))
+(define (snake-x given-list) (cadr (snake-list given-list)))
+(define (snake-y given-list) (car (snake-list given-list)))
+(define (scene-size given-list) (caddr given-list))
+(define (change-x given-list) (cadr (change-list given-list)))
+(define (change given-list) (car (change-list given-list)))
+(define (new-head-x given-list) (+ (snake-x given-list)(change-x given-list)))
+(define (new-head-y given-list) (+ (snake-y given-list)(change-y given-list)))
+
+(define (cut-the-tail list)
+  (if (null? (cdr list))
+      '()
+      (cons
+       (car list)
+       (cut-the-tail
+        (cdr list)))))
+
+(snake-x main-list)
+(snake-y main-list)
+
+(new-head-y main-list)
+(new-head-x main-list)
+
+
+
+(cons (apple-list main-list) (cons (cddadr main-list) (cddr main-list)))
+
+(place-image
+ (square (scene-size main-list) "solid" "green")
+ (+ (* (apple-x main-list) (scene-size main-list)) (/ (scene-size main-list) 2))
+ (+ (* (apple-y main-list) (scene-size main-list)) (/ (scene-size main-list) 2))
+ (empty-scene
+  (sqr (scene-size main-list))
+  (sqr (scene-size main-list))))
+
+(cut-the-tail '(0 1 2 3))
