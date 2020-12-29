@@ -7,6 +7,10 @@ msg:
 
 .globl _start
 _start:
+    lea msg, %rax
+    mov msg, %rax
+    lea msg, %rdi
+    mov msg, %rdi
   # write
   mov  $1,   %rax
   mov  $1,   %rdi

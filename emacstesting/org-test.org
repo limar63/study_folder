@@ -1,1 +1,105 @@
-MY PROJECT -*- mode: org -*-
+#+STARTUP: showall indent highstars
+
+* Отладка 16-х адресов
+
+** План работ                                                          :asm:
+- Научиться делать процедуры в ассемблеры (можно гуглить)
+
+#+NAME:Proc-example
+#+BEGIN_SRC asm :tangle proc-test.s :noweb yes
+     .data
+ message:
+     .ascii "Hello, world!\n"      #ascii is troed on print_fun label memory location
+     .set len, . - message         #len is stored in assembler memory
+
+     .text
+
+ print_fun:
+     #write(1, message, len)
+     mov $1, %rax                  #1 in rax calls write during syscall
+     mov $1, %rdi                  #1 in rdi calls stdout during syscall
+     mov $message, %rsi            #putting message value (because with $) text inside rsi to write it
+     mov $len, %rdx                #putting len value to set amount of bytes to print
+     syscall
+     ret
+ exit_fun:
+     #exit(0)
+     mov $60, %rax                 #60 calls exit during syscall
+     xor %rdi, %rdi                #puts xor + reg = 0 in reg. We put 0 inside rdi this way
+     syscall
+     ret
+
+     .global _start
+ _start:
+     call print_fun
+     call exit_fun
+
+
+
+#+END_SRC
+
+#+NAME:Proc-example-1
+#+BEGIN_SRC asm :tangle proc-test-1.s :noweb yes
+#Privet
+    .data
+stack:
+    .space 0x1000
+stack_bottom:
+
+val1:
+    .long 10
+
+val2:
+    .long 20
+
+val3:
+    .long 30
+
+    .text
+
+#plus_fun:
+    #movq %rsp, %rax
+    #addq 8(%rsp), %rax
+    #addq %rax, 16(%rsp)
+    #movq -16(%rsp), %rsp
+    #ret
+
+    .global _start
+_start:
+    movq $stack_bottom, %rsp
+    pushq $val1
+    pushq $val2
+    pushq $val3
+
+    #call plus_fun
+
+    mov $35, %rax
+    mov  $60, %rax
+    xor  %rdi, %rdi
+    syscall
+
+
+
+
+#+END_SRC
+
+- Научиться передавать параметры в процедуру (можно гуглить)
+- Научиться возвращать значения из процедуры (можно гуглить)
+- Создать алгоритм перевода из числа (8 байт) в ascii (16 байт) (самому)
+- Изучить вызов функции в tangle
+
+#+NAME:Program
+#+BEGIN_SRC asm :tangle aaa.asm :noweb yes
+  mov 0x55, %rax
+  <<Algorythm>>
+#+END_SRC
+
+** Алгоритм
+- Разбить число на полубайты
+- Сопоставить каждому числу 16ную букву из аскии таблицы
+
+
+#+NAME:Algorythm
+#+BEGIN_SRC asm
+  mov 0x44, %rax
+#+END_SRC
