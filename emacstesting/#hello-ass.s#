@@ -1,0 +1,21 @@
+.data
+msg:
+  .ascii "Hello, world!\n"
+    .set len, . - msg
+    .set len1, . - len
+
+.text
+
+.globl _start
+_start:
+  # write
+  mov  $1,   %rax
+  mov  $1,   %rdi
+  mov  $ms, %rsi
+  mov  $len1, %rdx
+  syscall
+
+  # exit
+  mov  $60, %rax
+  xor  %rdi, %rdi
+  syscall

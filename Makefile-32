@@ -1,0 +1,2 @@
+all:
+	gcc -c proc-test-1.s && ld proc-test-1.o && ./a.out
