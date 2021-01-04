@@ -34,7 +34,7 @@ print:
 
   dec     %ecx                    # count down
         lea     print(%rip), %rsp
-        jnz     %rsp                   # if not done counting, do some more
+        jnz     $rsp                   # if not done counting, do some more
 
         pop     %rbx                    # restore rbx before returning
         ret
