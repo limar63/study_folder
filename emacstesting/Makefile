@@ -1,2 +1,2 @@
 all:
-	gcc proc-c.s -nostdlib -o proc-c
+	gcc proc-test-2.s -nostdlib -g -o proc-test-2

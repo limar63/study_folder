@@ -1,6 +1,6 @@
     .text
 msg:
-    .ascii "Hello, owrld!\n"
+    .ascii "a\n"
     .set len, . - msg
 
     .globl _start
