@@ -1,0 +1,46 @@
+#+STARTUP: showall indent highstars
+
+* Linked list GAS assembly program
+
+** Purpose
+-Generates linked list data structure, which is created in memory space
+ statically allocated (right now 3000bytes)
+-You can add new elements, cut old elements and print whole linked list
+ data structure
+-linkedlist.s is contains linked list manipulation logic and _start body, other printing.s
+ contains printing logic
+
+** Linkedlist.s
+-Elements are added using add_head function. Value to store is given to
+ %rbx register before calling the function
+-To cut the head just simply call the cut_head procedure
+-To print the linked list call the pre_print procedure
+-Printing function calls functions from printing.s
+
+** Printing
+-Printing program allows to convert a numeric 0x value to ascii for
+ future printing
+-Value which is getting printed is contained inside var1 label
+-optimizing function allows to skip first 8 bytes if they are all zeroes
+-It is moved to %r8 register from a label and then %r8 is used in
+ printing functions as a value for print
+-Parse intro is used becuase there is no _start body to put values
+ required to start parsing the number to ascii.
+-Parse_start checks if lowest number is 0-9 or a-f, if it's 0-9 then
+ calls a function for 0-9 parsing, otherwise, stays in the same function
+ for a-f conversion
+-Register %r12 is used to store converted ascii-fied numbers.
+-Check_for_overflow is used to see if %r12 is overflowed. If it's so -
+ %r12 value is stored inside %r14
+-%r14 and %r12 contain reversed version of the converted number and need
+ to be reversed. Stack is used for it
+
+** Debugging
+-Contains few written gdb scritp functions.
+-Print_list just prints current linked list inside gdb environment
+-assert_list_value takes an array {0, 1, 2, 3} of elements as first
+ argument and it's length (from zero) as second argument and checks if
+ array values are equal to linkedlist values. The right-est element is
+ the head of the linked list. Core node is not included
+-assert_list_length takes a length argument and checks if the length of
+ the linked list is equal to that value
