@@ -10,14 +10,14 @@
 -linkedlist.s is contains linked list manipulation logic and _start body, other printing.s
  contains printing logic
 
-** Linkedlist.s
+** linkedlist.s
 -Elements are added using add_head function. Value to store is given to
  %rbx register before calling the function
 -To cut the head just simply call the cut_head procedure
 -To print the linked list call the pre_print procedure
 -Printing function calls functions from printing.s
 
-** Printing
+** printing.s
 -Printing program allows to convert a numeric 0x value to ascii for
  future printing
 -Value which is getting printed is contained inside var1 label
