@@ -1,2 +1,0 @@
-all:
-	gcc -L/home/lehalinuksoid/Python_rofli/emacstesting/linkedlist linkedlist.s -nostdlib -g -o linkedlist -lprint
