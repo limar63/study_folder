@@ -11,9 +11,9 @@ nextline:
 var1:
     .quad 0x00000000000ef12b                        #number which will be parsed
 
-    .global parse_intro:function
-    .global optimizing:function
-    .global time_to_print:function
+    .global parse_intro
+    .global optimizing
+    .global time_to_print
 
     .text
 
